@@ -15,7 +15,7 @@ const App = () => {
     return (
         <AppContainer>
             <AppProvider>
-                <Player name="Ofer" id={1} />
+                <Player name="Player" id={1} />
                 <PlayingTable />
                 <Player name="PC" id={2} />
             </AppProvider>
