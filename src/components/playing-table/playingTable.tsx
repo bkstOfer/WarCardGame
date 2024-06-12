@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useAppContext, useAppDispatchContext } from 'src/context/appContext';
 import { calculateRoundWinner, calculateWinnerName, draw2CardsFromDeck, getNewDeck } from 'src/app.service';
 import styled from 'styled-components';
@@ -38,6 +38,7 @@ const PlayersDeck = styled.div`
 const PlayingTable = () => {
     const state = useAppContext();
     const dispatch = useAppDispatchContext();
+    const [isDrawing, setIsDrawing] = useState(false);
 
     useEffect(() => {
         const fetchNewDeck = async () => {
@@ -50,6 +51,9 @@ const PlayingTable = () => {
     }, []);
 
     const drawClicked = async () => {
+        if (isDrawing) return;
+        setIsDrawing(true);
+
         if (state && state.playingDeck) {
             const drawnCards = await draw2CardsFromDeck(state.playingDeck.deck_id);
             dispatch({ type: 'save-players-card', cards: drawnCards.cards });
@@ -62,6 +66,7 @@ const PlayingTable = () => {
                 dispatch({ type: 'game-over', winnerName });
             }
         }
+        setIsDrawing(false);
     };
 
     const restartGameClicked = async () => {
@@ -80,68 +85,10 @@ const PlayingTable = () => {
                 <span>Current turn: {state?.players.find(player => player.id === state?.currentTurn)?.name}</span>
                 <h2>{state?.gameMsgBorad || "-"}</h2>
             </div>
-            <button onClick={drawClicked} disabled={state?.isGameOver}>Draw</button>
+            <button onClick={drawClicked} disabled={isDrawing || state?.isGameOver}>Draw</button>
             <button onClick={restartGameClicked} style={{ display: state?.isGameOver ? 'block' : 'none' }}>Restart Game</button>
         </Table>
     );
 };
 
 export default PlayingTable;
-
-// import { useEffect } from 'react';
-// import { useAppContext, useAppDispatchContext } from 'src/context/appContext';
-// import { calculateRoundWinner, draw2CardsFromDeck, getNewDeck } from 'src/app.service';
-// import './playingTable.css'
-
-// const PlayingTable = () => {
-//     const state = useAppContext();
-//     const dispatch = useAppDispatchContext();
-
-//     useEffect(() => {
-//         const fetchNewDeck = async () => {
-//             const deck = await getNewDeck();
-//             dispatch({ type: 'set-deck', deck });
-//         };
-//         fetchNewDeck();
-
-//         return () => { };
-//     }, []);
-
-//     const drawClicked = async () => {
-//         if (state && state.playingDeck) {
-//             const drawnCards = await draw2CardsFromDeck(state.playingDeck.deck_id);
-//             dispatch({ type: 'save-players-card', cards: drawnCards.cards });
-
-//             const roundWinner = await calculateRoundWinner(state.players, drawnCards.cards, state.playingDeck.deck_id);
-//             dispatch({ type: 'update-round-win', roundWinner });
-
-//             if (!drawnCards.remaining) {
-//                 dispatch({ type: 'game-over' });
-//             }
-//         }
-//     };
-
-//     const restartGameClicked = async () => {
-//         const newDeck = await getNewDeck();
-//         dispatch({ type: 'restart-game', deck: newDeck });
-//     }
-
-//     return (
-//         <div className='table'>
-//             <div className='deck main'></div>
-//             <div className='players-deck'>
-//                 <div className='deck player' style={{ backgroundImage: `url(${state?.players[0]?.playerCard?.image})` }}></div>
-//                 <div className='deck player' style={{ backgroundImage: `url(${state?.players[1]?.playerCard?.image})` }}></div>
-//             </div>
-//             <div>
-//                 <span>Current turn: {state?.players.find(player => player.id === state?.currentTurn)?.name}</span>
-//                 <h2>{state?.gameMsgBorad || "-"}</h2>
-//             </div>
-//             <button onClick={drawClicked} disabled={state?.isGameOver}>Draw</button>
-//             <button onClick={restartGameClicked} style={{ display: state?.isGameOver ? 'block' : 'none' }}>Restart Game</button>
-
-//         </div>
-//     );
-// };
-
-// export default PlayingTable;
