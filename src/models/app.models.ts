@@ -33,3 +33,13 @@ export interface IRoundWinner {
     message: string,
     pile: IPlayerPile | null
 }
+
+export type AppAction =
+    | { type: 'add-new-player'; id: number; name: string }
+    | { type: 'update-player-name'; id: number; name: string }
+    | { type: 'update-deck-remaining'; remaining: number }
+    | { type: 'set-deck'; deck: IPlayingDeck }
+    | { type: 'save-players-card'; cards: IPlayingCard[] }
+    | { type: 'update-round-win'; roundWinner: { id: number; pile: IPlayerPile; message: string } }
+    | { type: 'game-over'; winnerName: string | null }
+    | { type: 'restart-game'; deck: IPlayingDeck };
