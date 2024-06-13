@@ -82,7 +82,7 @@ const PlayingTable = () => {
 
     return (
         <Table>
-            <Deck className='main'></Deck>
+            <Deck className='main' style={{ visibility: state?.isGameOver ? 'hidden' : 'visible' }}></Deck>
             <PlayersDeck>
                 <Deck className='player' style={{ backgroundImage: `url(${state?.players[0]?.playerCard?.image})` }}></Deck>
                 <Deck className='player' style={{ backgroundImage: `url(${state?.players[1]?.playerCard?.image})` }}></Deck>
