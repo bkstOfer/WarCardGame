@@ -76,9 +76,14 @@ const reducer = (state: IAppState, action: AppAction) => {
         case 'game-over': {
             return {
                 ...state,
-                gameMsgBorad: action.winnerName ? `${action.winnerName} won the game!` : "Game ended in a tie!",
                 isGameOver: true,
                 currentTurn: -1
+            };
+        }
+        case 'announce-winner': {
+            return {
+                ...state,
+                gameMsgBorad: action.winnerName ? `${action.winnerName} won the game!` : "Game ended in a tie!",
             };
         }
         case 'restart-game': {

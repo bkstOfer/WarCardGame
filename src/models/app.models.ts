@@ -41,5 +41,6 @@ export type AppAction =
     | { type: 'set-deck'; deck: IPlayingDeck }
     | { type: 'save-players-card'; cards: IPlayingCard[] }
     | { type: 'update-round-win'; roundWinner: { id: number; pile: IPlayerPile; message: string } }
-    | { type: 'game-over'; winnerName: string | null }
+    | { type: 'game-over'; }
+    | { type: 'announce-winner'; winnerName: string | null }
     | { type: 'restart-game'; deck: IPlayingDeck };

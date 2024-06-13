@@ -50,6 +50,13 @@ const PlayingTable = () => {
         return () => { };
     }, []);
 
+    useEffect(() => {
+        if (state?.isGameOver) {
+            const winnerName = calculateWinnerName(state?.players || []);
+            dispatch({ type: 'announce-winner', winnerName });
+        }
+    }, [state?.isGameOver]);
+
     const drawClicked = async () => {
         if (isDrawing) return;
         setIsDrawing(true);
@@ -62,8 +69,7 @@ const PlayingTable = () => {
             dispatch({ type: 'update-round-win', roundWinner });
 
             if (!drawnCards.remaining) {
-                const winnerName = calculateWinnerName(state.players);
-                dispatch({ type: 'game-over', winnerName });
+                dispatch({ type: 'game-over' });
             }
         }
         setIsDrawing(false);
